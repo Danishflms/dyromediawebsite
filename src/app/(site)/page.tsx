@@ -12,6 +12,8 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/reveal";
 import { HeroHeadline } from "@/components/hero-headline";
 import { RollingWords } from "@/components/rolling-words";
 import { WorkCard } from "@/components/work-card";
+import { AutoplayVideo } from "@/components/autoplay-video";
+import { CountUp } from "@/components/count-up";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
 import { CtaBand } from "@/components/cta-band";
@@ -155,11 +157,22 @@ function SelectedWork({ projects }: { projects: Project[] }) {
       <RevealGroup className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <RevealItem key={project.id}>
-            <WorkCard project={project} />
+            <WorkCard
+              project={project}
+              media={
+                project.video ? (
+                  <AutoplayVideo
+                    video={project.video}
+                    aspect={project.aspect}
+                    title={project.title}
+                  />
+                ) : undefined
+              }
+            />
           </RevealItem>
         ))}
       </RevealGroup>
-      <Reveal className="mt-12 flex flex-wrap gap-4">
+      <Reveal className="mt-12 flex flex-wrap justify-center gap-4">
         <CtaLink href="/editing" variant="secondary">
           Editing portfolio
         </CtaLink>
@@ -179,7 +192,7 @@ function Stats({ stats }: { stats: HomeContent["stats"] }) {
           {stats.map((stat) => (
             <RevealItem key={stat.label}>
               <p className="text-metal font-display text-4xl tracking-tight md:text-6xl">
-                {stat.value}
+                <CountUp value={stat.value} />
               </p>
               <p className="mt-2 font-mono text-[11px] tracking-[0.2em] uppercase text-muted">
                 {stat.label}
@@ -197,6 +210,9 @@ function Clients({ clients }: { clients: string[] }) {
     <section className="border-t border-line">
       <Container className="py-16 md:py-20">
         <Reveal>
+          <p className="mb-8 text-center font-mono text-[11px] tracking-[0.25em] uppercase text-muted">
+            Our Clients
+          </p>
           <LogoMarquee clients={clients} />
         </Reveal>
       </Container>

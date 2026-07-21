@@ -79,23 +79,37 @@ export function TestimonialCarousel({
       onFocusCapture={() => (paused.current = true)}
       onBlurCapture={() => (paused.current = false)}
     >
-      <div className="relative min-h-[18rem] overflow-hidden md:min-h-[16rem]">
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, x: direction > 0 ? 56 : -56 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.45, ease: EASE }}
-          drag={count > 1 ? "x" : false}
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.15}
-          onDragEnd={(_, info) => {
-            if (info.offset.x < -60) next();
-            else if (info.offset.x > 60) prev();
-          }}
-          className={count > 1 ? "cursor-grab active:cursor-grabbing" : ""}
-        >
-          <TestimonialCard testimonial={items[index]} large />
-        </motion.div>
+      <div className="relative overflow-hidden">
+        {/* Invisible sizer: stacks every testimonial in one grid cell so the
+            box is always as tall as the LONGEST quote. Keeps the section
+            below from jumping up and down as slides change. */}
+        <div aria-hidden="true" className="grid">
+          {items.map((item, i) => (
+            <div key={i} className="invisible [grid-area:1/1]">
+              <TestimonialCard testimonial={item} large />
+            </div>
+          ))}
+        </div>
+
+        {/* Active slide, overlaid on the fixed-height box. */}
+        <div className="absolute inset-0">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: direction > 0 ? 56 : -56 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, ease: EASE }}
+            drag={count > 1 ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.15}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -60) next();
+              else if (info.offset.x > 60) prev();
+            }}
+            className={cn("h-full", count > 1 && "cursor-grab active:cursor-grabbing")}
+          >
+            <TestimonialCard testimonial={items[index]} large />
+          </motion.div>
+        </div>
       </div>
 
       {/* Screen-reader announcement of the current slide. */}

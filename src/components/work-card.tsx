@@ -1,18 +1,23 @@
+import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import type { Project } from "@/data/types";
 import { MediaPlaceholder } from "./media-placeholder";
 
 /**
  * Presentational project card. Wrap it in a <button> (lightbox) or
- * leave it static — it renders identically either way.
+ * leave it static — it renders identically either way. Pass `media` to
+ * replace the placeholder frame with a custom node (e.g. an inline
+ * autoplay video on the home Selected Work grid).
  */
 export function WorkCard({
   project,
   icon = "play",
+  media,
   className,
 }: {
   project: Project;
   icon?: "play" | "camera" | "frame";
+  media?: ReactNode;
   className?: string;
 }) {
   return (
@@ -24,13 +29,15 @@ export function WorkCard({
       )}
     >
       <div className="sheen overflow-hidden">
-        <MediaPlaceholder
-          aspect={project.aspect}
-          icon={icon}
-          imageUrl={project.thumbnailUrl}
-          imageAlt={project.thumbnailAlt}
-          className="transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-        />
+        {media ?? (
+          <MediaPlaceholder
+            aspect={project.aspect}
+            icon={icon}
+            imageUrl={project.thumbnailUrl}
+            imageAlt={project.thumbnailAlt}
+            className="transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          />
+        )}
       </div>
       <div className="mt-4 flex items-baseline justify-between gap-4">
         <h3 className="text-sm font-medium text-fg transition-colors duration-300 group-hover:text-white">
