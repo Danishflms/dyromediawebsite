@@ -20,8 +20,11 @@ export async function Footer() {
   return (
     <footer className="border-t border-line">
       <Container className="py-16 md:py-20">
-        <div className="grid grid-cols-3 gap-x-6 gap-y-10 md:grid-cols-[2fr_1fr_1fr_1fr] md:gap-12">
-          <div className="col-span-3 md:col-span-1">
+        {/* Brand block spans the full width with the three link columns
+            beneath it until there's room for a true 4-column footer —
+            at 768px that split gives the paragraph only a 220px measure. */}
+        <div className="grid grid-cols-3 gap-x-6 gap-y-10 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:gap-12">
+          <div className="col-span-3 lg:col-span-1">
             <Link
               href="/"
               aria-label="Dyro Media — home"

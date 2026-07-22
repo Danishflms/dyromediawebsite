@@ -47,7 +47,9 @@ export default async function AboutPage() {
               </RevealItem>
             ))}
           </RevealGroup>
-          <Reveal delay={0.1}>
+          {/* Capped once it stops being a column and becomes a full-width
+              block — an unconstrained 1:1 is ~694px tall on a tablet. */}
+          <Reveal delay={0.1} className="mx-auto w-full max-w-sm lg:mx-0 lg:max-w-none">
             {/* TODO: swap for real behind-the-scenes imagery. */}
             <MediaPlaceholder aspect="1:1" icon="camera" label="Behind the scenes" />
           </Reveal>
@@ -58,7 +60,7 @@ export default async function AboutPage() {
         <RevealGroup className="grid gap-4 md:grid-cols-3">
           {philosophy.items.map((item) => (
             <RevealItem key={item.title}>
-              <div className="glass-panel sheen h-full p-8 md:p-10">
+              <div className="glass-panel sheen h-full p-6 lg:p-10">
                 <h3 className="font-display text-metal-soft text-2xl tracking-tight">
                   {item.title}
                 </h3>

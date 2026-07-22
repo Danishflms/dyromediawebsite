@@ -78,12 +78,19 @@ function Hero({ hero }: { hero: HomeContent["hero"] }) {
 
         <div aria-hidden="true" className="hero-line mt-8 md:mt-10" />
 
-        {/* Beneath the tagline: rolling words (left), CTAs (center), agency info (right) — all aligned. */}
-        <div className="mt-10 grid w-full items-center gap-8 md:mt-16 md:grid-cols-3">
-          <Reveal delay={0.15} className="flex justify-center md:justify-start">
+        {/* Beneath the tagline. Three distinct compositions:
+            phone  — everything stacked and centred;
+            tablet — rolling words | info side by side, CTAs on their own row
+                     (three columns can't hold a 60px phrase until ~1280px);
+            wide   — rolling words | CTAs | info across three columns. */}
+        <div className="mt-10 grid w-full items-center gap-8 sm:grid-cols-2 md:mt-16 xl:grid-cols-3">
+          <Reveal delay={0.15} className="flex justify-center sm:justify-start">
             <RollingWords />
           </Reveal>
-          <Reveal delay={0.2} className="flex w-full flex-col items-center gap-3">
+          <Reveal
+            delay={0.2}
+            className="flex w-full flex-col items-center gap-3 sm:order-last sm:col-span-2 sm:flex-row sm:justify-center xl:order-none xl:col-span-1 xl:flex-col"
+          >
             <CtaLink href={hero.primaryCta.href} block>
               {hero.primaryCta.label}
             </CtaLink>
@@ -91,8 +98,8 @@ function Hero({ hero }: { hero: HomeContent["hero"] }) {
               {hero.secondaryCta.label}
             </CtaLink>
           </Reveal>
-          <Reveal delay={0.25} className="flex justify-center md:justify-end">
-            <p className="max-w-sm text-center text-base leading-relaxed text-muted md:text-left md:text-lg">
+          <Reveal delay={0.25} className="flex justify-center sm:justify-end">
+            <p className="max-w-sm text-center text-base leading-relaxed text-muted sm:text-left md:text-lg">
               {hero.subhead}
             </p>
           </Reveal>
@@ -123,7 +130,7 @@ function WhatWeDo({ whatWeDo }: { whatWeDo: HomeContent["whatWeDo"] }) {
           <RevealItem key={path.href}>
             <Link
               href={path.href}
-              className="glass-panel sheen group flex h-full flex-col justify-between gap-10 p-8 md:p-12"
+              className="glass-panel sheen group flex h-full flex-col justify-between gap-10 p-8 lg:p-12"
             >
               <div>
                 <h3 className="font-display text-metal-soft text-3xl tracking-tight md:text-4xl">
@@ -188,7 +195,9 @@ function Stats({ stats }: { stats: HomeContent["stats"] }) {
   return (
     <section className="border-t border-line">
       <Container className="py-16 md:py-20">
-        <RevealGroup className="grid grid-cols-2 gap-10 md:grid-cols-4">
+        {/* Two-up until there's genuinely room for four — at 768px a 4-col
+            split leaves 144px per stat and wraps the labels unevenly. */}
+        <RevealGroup className="grid grid-cols-2 gap-10 lg:grid-cols-4">
           {stats.map((stat) => (
             <RevealItem key={stat.label}>
               <p className="text-metal font-display text-4xl tracking-tight md:text-6xl">
