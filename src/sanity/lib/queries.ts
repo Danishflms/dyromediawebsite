@@ -37,6 +37,11 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
     whatWeDoProductionTitle,
     whatWeDoProductionDescription,
     stats[]{ value, label },
+    clients[]{
+      name,
+      url,
+      "logoUrl": logo.asset->url
+    },
     clientNames
   }
 `);

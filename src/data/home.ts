@@ -52,14 +52,17 @@ export const stats = [
   { value: "60+", label: "Clients worldwide" },
 ] as const;
 
-/** Text-based placeholder logos. TODO: replace with real client names or SVG logos. */
-export const clients = [
-  "NORTHLINE",
-  "ATLAS & CO",
-  "VERVE",
-  "HALCYON",
-  "MERIDIAN",
-  "OAKFRAME",
-  "LUMEN",
-  "STATE & MAIN",
-] as const;
+/**
+ * Placeholder client strip. Real entries live in Sanity (Home Page →
+ * Clients), where each can carry a logo image and a link.
+ */
+export const clients: { name: string; url?: string; logoUrl?: string }[] = [
+  { name: "NORTHLINE" },
+  { name: "ATLAS & CO" },
+  { name: "VERVE" },
+  { name: "HALCYON" },
+  { name: "MERIDIAN" },
+  { name: "OAKFRAME" },
+  { name: "LUMEN" },
+  { name: "STATE & MAIN" },
+];

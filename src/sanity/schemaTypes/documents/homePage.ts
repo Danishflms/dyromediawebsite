@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 import { makeIcon } from "../icon";
 
 /** Home page singleton — hero, "what we do" panels, stats, and client list. */
@@ -116,12 +116,57 @@ export const homePage = defineType({
       description: 'e.g. "7+" / "Years of craft". Leave empty to keep the current placeholder numbers.',
     }),
     defineField({
+      name: "clients",
+      title: "Clients",
+      type: "array",
+      group: "stats",
+      description:
+        "Brands and creators in the scrolling strip. Upload a logo, or leave the logo empty to show the name as styled text instead. Add a link and the mark becomes clickable.",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "client",
+          fields: [
+            defineField({
+              name: "name",
+              title: "Name",
+              type: "string",
+              description:
+                "Shown as a styled wordmark when there's no logo, and used as the logo's alt text either way.",
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: "logo",
+              title: "Logo",
+              type: "image",
+              description:
+                "Optional. A transparent PNG or SVG works best. Leave empty for creators who only have a profile picture — the name shows as styled text instead.",
+            }),
+            defineField({
+              name: "url",
+              title: "Link",
+              type: "url",
+              description:
+                "Optional. Where clicking this client goes — their website, channel, or social page. Opens in a new tab.",
+            }),
+          ],
+          preview: {
+            select: { title: "name", subtitle: "url", media: "logo" },
+          },
+        }),
+      ],
+    }),
+    defineField({
       name: "clientNames",
-      title: "Client logo marquee",
+      title: "Client names (old)",
       type: "array",
       group: "stats",
       of: [{ type: "string" }],
-      description: "Text-based client names shown in the scrolling marquee.",
+      deprecated: {
+        reason: 'Use the "Clients" field above instead — it supports logos and links.',
+      },
+      readOnly: true,
+      hidden: ({ value }) => value === undefined,
     }),
   ],
   preview: {

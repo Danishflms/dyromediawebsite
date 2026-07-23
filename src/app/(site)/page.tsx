@@ -214,7 +214,7 @@ function Stats({ stats }: { stats: HomeContent["stats"] }) {
   );
 }
 
-function Clients({ clients }: { clients: string[] }) {
+function Clients({ clients }: { clients: HomeContent["clients"] }) {
   return (
     <section className="border-t border-line">
       <Container className="py-16 md:py-20">

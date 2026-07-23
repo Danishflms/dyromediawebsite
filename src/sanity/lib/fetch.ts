@@ -133,7 +133,15 @@ type HomePageDoc = {
   whatWeDoProductionTitle?: string;
   whatWeDoProductionDescription?: string;
   stats?: { value: string; label: string }[];
+  clients?: ClientEntry[];
   clientNames?: string[];
+};
+
+/** A brand or creator in the client strip — logo, styled text, or either plus a link. */
+export type ClientEntry = {
+  name: string;
+  url?: string;
+  logoUrl?: string;
 };
 
 export type HomeContent = {
@@ -148,7 +156,7 @@ export type HomeContent = {
   };
   whatWeDo: { title: string; href: string; description: string }[];
   stats: { value: string; label: string }[];
-  clients: string[];
+  clients: ClientEntry[];
 };
 
 export const getHomeContent = cached(async (): Promise<HomeContent> => {
@@ -186,7 +194,13 @@ export const getHomeContent = cached(async (): Promise<HomeContent> => {
       },
     ],
     stats: doc?.stats?.length ? doc.stats : [...stats],
-    clients: doc?.clientNames?.length ? doc.clientNames : [...clients],
+    // Prefer the richer Clients field; fall back to the older plain-text
+    // client names so nothing disappears before they're migrated.
+    clients: doc?.clients?.length
+      ? doc.clients
+      : doc?.clientNames?.length
+        ? doc.clientNames.map((name) => ({ name }))
+        : [...clients],
   };
 }, "homePage");
 
