@@ -143,6 +143,15 @@ export const homePage = defineType({
                 "Optional. A transparent PNG or SVG works best. Leave empty for creators who only have a profile picture — the name shows as styled text instead.",
             }),
             defineField({
+              name: "logoScale",
+              title: "Logo size (%)",
+              type: "number",
+              initialValue: 100,
+              description:
+                "Only needed if a logo looks too small or too big next to the others. Many logo files have blank space baked around the artwork, which makes them render smaller — bump this to 130 or 150 to compensate. 100 is the default.",
+              validation: (rule) => rule.min(60).max(200),
+            }),
+            defineField({
               name: "url",
               title: "Link",
               type: "url",

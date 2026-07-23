@@ -142,6 +142,10 @@ export type ClientEntry = {
   name: string;
   url?: string;
   logoUrl?: string;
+  /** Per-logo size nudge in percent (100 = default), for artwork with baked-in padding. */
+  logoScale?: number;
+  /** Source aspect ratio (w/h), used to even out how big each logo reads. */
+  logoAspect?: number;
 };
 
 export type HomeContent = {

@@ -1,6 +1,29 @@
 import { cn } from "@/lib/cn";
 import type { ClientEntry } from "@/sanity/lib/fetch";
 
+/** Baseline logo height, before aspect correction. */
+const LOGO_BASE_PX = 38;
+
+/** The canvas shape a logo file is assumed to have when we can't tell. */
+const REFERENCE_ASPECT = 2.5;
+
+/**
+ * Works out how tall a logo should render.
+ *
+ * Sizing purely by height punishes square logo files: a wide wordmark
+ * exported on a 320x320 canvas sits in a thin band with big transparent
+ * margins, so at a fixed height the visible mark is a fraction of its box
+ * while a 4:1 file of the same height reads huge. Scaling inversely with
+ * the square root of the aspect ratio evens out how much ink each one puts
+ * on screen. `logoScale` from the CMS is the manual override on top.
+ */
+function logoHeightPx(client: ClientEntry) {
+  const aspect = client.logoAspect && client.logoAspect > 0 ? client.logoAspect : REFERENCE_ASPECT;
+  const aspectCorrection = Math.min(Math.max(Math.sqrt(REFERENCE_ASPECT / aspect), 0.8), 1.7);
+  const manual = (client.logoScale ?? 100) / 100;
+  return Math.round(LOGO_BASE_PX * aspectCorrection * manual);
+}
+
 /**
  * One client mark: an uploaded logo, or the name set as a typographic
  * wordmark when there's no logo (creators who only have a profile
@@ -20,14 +43,22 @@ function ClientMark({
   const mark = client.logoUrl ? (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={`${client.logoUrl}?h=96&fit=max&auto=format`}
+      // Ask for a tall source so it stays crisp when scaled up.
+      src={`${client.logoUrl}?h=240&fit=max&auto=format`}
       alt={duplicate ? "" : client.name}
       loading="lazy"
       draggable={false}
+      // Height drives the size; width follows the aspect ratio. Declaring
+      // the ratio reserves the width before the lazy image arrives, so the
+      // strip doesn't shift as logos load in.
+      style={{
+        height: `${logoHeightPx(client)}px`,
+        aspectRatio: client.logoAspect ? String(client.logoAspect) : undefined,
+      }}
       className={cn(
-        "h-7 w-auto max-w-[150px] object-contain opacity-55 grayscale",
+        "w-auto max-w-[220px] object-contain opacity-75 grayscale",
         "transition duration-300 ease-out",
-        "group-hover/mark:opacity-100 group-hover/mark:grayscale-0 md:h-8",
+        "group-hover/mark:opacity-100 group-hover/mark:grayscale-0",
       )}
     />
   ) : (
@@ -41,8 +72,10 @@ function ClientMark({
     </span>
   );
 
+  // min-height (not a fixed height) so a scaled-up logo grows the row
+  // instead of being clipped by it.
   const shared =
-    "group/mark flex h-8 shrink-0 items-center transition-transform duration-300 ease-out hover:scale-[1.06] motion-reduce:hover:scale-100";
+    "group/mark flex min-h-14 shrink-0 items-center transition-transform duration-300 ease-out hover:scale-[1.06] motion-reduce:hover:scale-100";
 
   if (!client.url) {
     return (

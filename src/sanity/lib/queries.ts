@@ -40,7 +40,9 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
     clients[]{
       name,
       url,
-      "logoUrl": logo.asset->url
+      logoScale,
+      "logoUrl": logo.asset->url,
+      "logoAspect": logo.asset->metadata.dimensions.aspectRatio
     },
     clientNames
   }
