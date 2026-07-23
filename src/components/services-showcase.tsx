@@ -63,7 +63,10 @@ function MarqueeRow({
     <div
       role="group"
       aria-label={label}
-      className="marquee-pause relative overflow-hidden"
+      // Deliberately no `marquee-pause` here: these tags aren't
+      // interactive, so the rows keep drifting through hover. The client
+      // strip still pauses, since those marks are links.
+      className="relative overflow-hidden"
       style={{
         maskImage:
           "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",

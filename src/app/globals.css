@@ -421,8 +421,9 @@
 .animate-marquee-reverse {
   animation: marquee var(--marquee-duration, 32s) linear infinite reverse;
 }
-/* Hold still while someone is reaching for a logo or reading a tag —
-   chasing a moving target is miserable. Also covers keyboard focus. */
+/* Opt-in pause, used by the client strip: those marks are links, and
+   chasing a moving target is miserable. Also covers keyboard focus. The
+   services tag rows deliberately omit this and keep drifting. */
 .marquee-pause:hover .animate-marquee,
 .marquee-pause:hover .animate-marquee-reverse,
 .marquee-pause:focus-within .animate-marquee,
