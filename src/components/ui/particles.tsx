@@ -8,6 +8,10 @@ interface ParticlesProps {
   particleSize?: number;
   animate?: boolean;
   className?: string;
+  /** How far the field drifts with the cursor. 1 = full viewport sweep. */
+  parallaxStrength?: number;
+  /** How fast it catches up each frame. Lower = slower and smoother. */
+  parallaxEase?: number;
 }
 
 export function Particles({
@@ -16,6 +20,8 @@ export function Particles({
   particleSize = 35,
   animate = true,
   className = "",
+  parallaxStrength = 1,
+  parallaxEase = 0.05,
 }: ParticlesProps) {
   const mountRef = useRef<HTMLDivElement>(null);
 
@@ -91,8 +97,8 @@ export function Particles({
 
     const handlePointerMove = (event: PointerEvent) => {
       if (event.isPrimary) {
-        mouseX = event.clientX - window.innerWidth / 2;
-        mouseY = event.clientY - window.innerHeight / 2;
+        mouseX = (event.clientX - window.innerWidth / 2) * parallaxStrength;
+        mouseY = (event.clientY - window.innerHeight / 2) * parallaxStrength;
       }
     };
 
@@ -105,8 +111,8 @@ export function Particles({
         material.color.setHSL(h, 0.5, 0.5);
       }
 
-      camera.position.x += (mouseX - camera.position.x) * 0.05;
-      camera.position.y += (-mouseY - camera.position.y) * 0.05;
+      camera.position.x += (mouseX - camera.position.x) * parallaxEase;
+      camera.position.y += (-mouseY - camera.position.y) * parallaxEase;
       camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
@@ -130,7 +136,7 @@ export function Particles({
 
       if (material) material.dispose();
     };
-  }, [color, particleCount, particleSize, animate]);
+  }, [color, particleCount, particleSize, animate, parallaxStrength, parallaxEase]);
 
   return (
     <div

@@ -34,6 +34,11 @@ export function SiteParticles() {
         particleCount={count}
         particleSize={5}
         animate={false}
+        // Gentler than the component's defaults: a shorter drift that eases
+        // in slowly, so the field glides with the cursor instead of
+        // whipping around after it.
+        parallaxStrength={0.55}
+        parallaxEase={0.02}
       />
     </div>
   );
