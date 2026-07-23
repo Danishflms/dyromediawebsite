@@ -14,6 +14,7 @@ import { RollingWords } from "@/components/rolling-words";
 import { WorkCard } from "@/components/work-card";
 import { AutoplayVideo } from "@/components/autoplay-video";
 import { CountUp } from "@/components/count-up";
+import { IndustrySelect } from "@/components/industry-select";
 import { ServicesShowcase } from "@/components/services-showcase";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
@@ -180,13 +181,15 @@ function SelectedWork({ projects }: { projects: Project[] }) {
           </RevealItem>
         ))}
       </RevealGroup>
-      <Reveal className="mt-12 flex flex-wrap justify-center gap-4">
+      <Reveal className="mt-12 flex flex-wrap items-center justify-center gap-4">
         <CtaLink href="/editing" variant="secondary">
           Editing portfolio
         </CtaLink>
         <CtaLink href="/production" variant="secondary">
           Production portfolio
         </CtaLink>
+        {/* The only entry point to the per-industry pages. */}
+        <IndustrySelect />
       </Reveal>
     </Section>
   );

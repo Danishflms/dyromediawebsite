@@ -98,6 +98,7 @@ export const PORTFOLIO_ITEMS_QUERY = defineQuery(/* groq */ `
     title,
     offering,
     category,
+    industry,
     clientType,
     description,
     aspectRatio,

@@ -343,6 +343,7 @@ type PortfolioItemDoc = {
   title: string;
   offering: "editing" | "production";
   category: string;
+  industry?: string;
   clientType?: string;
   aspectRatio: Project["aspect"];
   video?: { provider: "youtube" | "vimeo"; videoId: string };
@@ -381,6 +382,16 @@ export async function getProductionPortfolio(): Promise<(Project & { category: s
   return productionDocs.length
     ? productionDocs.map(toProject)
     : productionProjects.map((p) => ({ ...p }));
+}
+
+/**
+ * Videos tagged with a given industry. Deliberately has no placeholder
+ * fallback — an industry page showing unrelated stand-in projects would be
+ * worse than an honest empty state.
+ */
+export async function getIndustryPortfolio(industry: string): Promise<Project[]> {
+  const docs = await getPortfolioItems();
+  return docs.filter((d) => d.industry === industry).map(toProject);
 }
 
 export async function getHomeSelectedWork(): Promise<Project[]> {

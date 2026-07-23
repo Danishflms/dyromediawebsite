@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { makeIcon } from "../icon";
+import { industries } from "@/data/industries";
 
 /**
  * A single piece of work. `offering` decides whether it shows on the
@@ -40,6 +41,16 @@ export const portfolioItem = defineType({
       description:
         'The small label shown on the card. Editing examples: "Long-form", "Short-form", "Ads". Production examples: "Weddings", "Events", "Brand", "PR", "Commercial".',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "industry",
+      title: "Industry",
+      type: "string",
+      description:
+        "Puts this video on that industry's page. Those pages are reachable only through the \"Select your industry\" menu on the home page — they're not linked anywhere else. Leave blank if it doesn't belong to one.",
+      options: {
+        list: industries.map((entry) => ({ title: entry.label, value: entry.slug })),
+      },
     }),
     defineField({
       name: "clientType",
