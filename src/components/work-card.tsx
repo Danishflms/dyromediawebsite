@@ -28,7 +28,9 @@ export function WorkCard({
         className,
       )}
     >
-      <div className="sheen overflow-hidden">
+      {/* Marks the frame as playable media so the custom cursor switches
+          to its play state over it. */}
+      <div data-cursor="play" className="sheen overflow-hidden">
         {media ?? (
           <MediaPlaceholder
             aspect={project.aspect}

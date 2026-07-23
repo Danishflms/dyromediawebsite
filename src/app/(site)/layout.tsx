@@ -5,6 +5,7 @@ import "../globals.css";
 import { site } from "@/data/site";
 import { getSiteSettings } from "@/sanity/lib/fetch";
 import { MotionProvider } from "@/components/motion-provider";
+import { CustomCursor } from "@/components/custom-cursor";
 import { SiteParticles } from "@/components/site-particles";
 import { BackgroundFX } from "@/components/background-fx";
 import { Nav } from "@/components/nav";
@@ -65,6 +66,7 @@ export default function RootLayout({
           <a href="#main" className="skip-link">
             Skip to content
           </a>
+          <CustomCursor />
           <SiteParticles />
           <BackgroundFX />
           <Nav />

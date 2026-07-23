@@ -44,7 +44,10 @@ export function AutoplayVideo({
   const [withSound, setWithSound] = useState(false);
 
   return (
-    <div className={cn("relative overflow-hidden border border-white/10 bg-black", aspectClasses[aspect])}>
+    <div
+      data-cursor="play"
+      className={cn("relative overflow-hidden border border-white/10 bg-black", aspectClasses[aspect])}
+    >
       <iframe
         src={withSound ? soundSrc(video) : mutedSrc(video)}
         title={title}

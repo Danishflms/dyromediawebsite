@@ -437,6 +437,24 @@
   }
 }
 
+/* ── Custom cursor ──────────────────────────────────────────────────
+   The class is added from JS only on fine-pointer devices, so touch
+   never loses its native behaviour. The universal selector is needed to
+   beat the `cursor-pointer` utilities on buttons, links, and cards. */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+/* Typing needs a caret, and iframes draw their own cursor — in both
+   cases hand control back rather than showing nothing. */
+html.has-custom-cursor input,
+html.has-custom-cursor textarea,
+html.has-custom-cursor select,
+html.has-custom-cursor iframe,
+html.has-custom-cursor [contenteditable="true"] {
+  cursor: auto !important;
+}
+
 /* Keyboard-only skip link. */
 .skip-link {
   position: fixed;
