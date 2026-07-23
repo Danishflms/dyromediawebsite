@@ -14,6 +14,7 @@ import { RollingWords } from "@/components/rolling-words";
 import { WorkCard } from "@/components/work-card";
 import { AutoplayVideo } from "@/components/autoplay-video";
 import { CountUp } from "@/components/count-up";
+import { ServicesShowcase } from "@/components/services-showcase";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
 import { CtaBand } from "@/components/cta-band";
@@ -251,6 +252,7 @@ export default async function Home() {
       <Hero hero={content.hero} />
       <WhatWeDo whatWeDo={content.whatWeDo} />
       <SelectedWork projects={selectedWork} />
+      <ServicesShowcase />
       <Stats stats={content.stats} />
       <Clients clients={content.clients} />
       <Testimonials items={testimonials} />

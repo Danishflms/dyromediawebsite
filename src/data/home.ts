@@ -53,6 +53,51 @@ export const stats = [
 ] as const;
 
 /**
+ * Services showcase — three marquee rows of capability tags with a CTA
+ * floating over them. Edit the tags here; the row labels are used as
+ * accessible group names rather than being drawn on screen.
+ */
+export const servicesShowcase = {
+  headline: { lead: "We handle your production,", emphasis: "end to end" },
+  cta: { label: "View services", href: "/services" },
+  rows: [
+    {
+      label: "Pre-production & creative",
+      tags: [
+        "Concept Development",
+        "Scriptwriting",
+        "Storyboarding",
+        "Creative Direction",
+        "Location Scouting",
+        "Shot Planning",
+      ],
+    },
+    {
+      label: "Production",
+      tags: [
+        "Videography",
+        "Photography",
+        "Event Coverage",
+        "Brand/PR Shoots",
+        "Multi-Camera Setup",
+        "On-Site Direction",
+      ],
+    },
+    {
+      label: "Post-production & delivery",
+      tags: [
+        "Video Editing",
+        "Color Grading",
+        "Sound Design",
+        "Motion Graphics",
+        "AI-Assisted Editing",
+        "Final Delivery & Formatting",
+      ],
+    },
+  ],
+} as const;
+
+/**
  * Placeholder client strip. Real entries live in Sanity (Home Page →
  * Clients), where each can carry a logo image and a link.
  */

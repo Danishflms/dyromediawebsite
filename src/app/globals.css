@@ -412,17 +412,26 @@
     transform: translateX(-50%);
   }
 }
+/* Duration is overridable per track via --marquee-duration; the client
+   strip keeps the 32s default by not setting it. */
 .animate-marquee {
-  animation: marquee 32s linear infinite;
+  animation: marquee var(--marquee-duration, 32s) linear infinite;
 }
-/* Hold still while someone is reaching for a logo — the marks are links,
-   and chasing a moving target is miserable. Also covers keyboard focus. */
+/* Same travel, played backwards — reads as scrolling to the right. */
+.animate-marquee-reverse {
+  animation: marquee var(--marquee-duration, 32s) linear infinite reverse;
+}
+/* Hold still while someone is reaching for a logo or reading a tag —
+   chasing a moving target is miserable. Also covers keyboard focus. */
 .marquee-pause:hover .animate-marquee,
-.marquee-pause:focus-within .animate-marquee {
+.marquee-pause:hover .animate-marquee-reverse,
+.marquee-pause:focus-within .animate-marquee,
+.marquee-pause:focus-within .animate-marquee-reverse {
   animation-play-state: paused;
 }
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
+  .animate-marquee,
+  .animate-marquee-reverse {
     animation: none;
   }
 }
