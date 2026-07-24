@@ -41,6 +41,9 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
       name,
       url,
       logoScale,
+      about,
+      work,
+      result,
       "logoUrl": logo.asset->url,
       "logoAspect": logo.asset->metadata.dimensions.aspectRatio
     },
@@ -126,6 +129,8 @@ export const TESTIMONIALS_QUERY = defineQuery(/* groq */ `
     quote,
     name,
     role,
+    result,
+    "photoUrl": photo.asset->url,
     order
   }
 `);

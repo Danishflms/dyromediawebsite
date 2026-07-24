@@ -33,7 +33,14 @@ export const testimonial = defineType({
       title: "Client photo",
       type: "image",
       options: { hotspot: true },
-      description: "Not shown on the site yet — stored for a future photo treatment.",
+      description: "Shown as a round avatar next to the name. A head-and-shoulders shot works best.",
+    }),
+    defineField({
+      name: "result",
+      title: "Result",
+      type: "string",
+      description:
+        "Optional, and highlighted separately from the quote. A single hard outcome, e.g. \"+2.4M views\", \"3x subscribers\", \"+180% watch time\".",
     }),
     defineField({
       name: "order",

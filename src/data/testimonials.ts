@@ -7,6 +7,10 @@ export type Testimonial = {
   quote: string;
   name: string;
   role: string;
+  /** Optional hard outcome, highlighted apart from the quote. */
+  result?: string;
+  /** Optional avatar URL (populated from Sanity, not the local fallback). */
+  photoUrl?: string;
 };
 
 export const testimonials: Testimonial[] = [

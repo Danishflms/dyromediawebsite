@@ -59,7 +59,7 @@ export function RollingWords({
   return (
     <span
       className={cn(
-        "inline-flex items-baseline gap-[0.3em] font-display text-5xl leading-none tracking-tight md:text-6xl",
+        "inline-flex items-baseline gap-[0.3em] font-display text-5xl leading-none tracking-tight md:text-6xl lg:text-7xl",
         className,
       )}
     >

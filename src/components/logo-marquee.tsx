@@ -1,3 +1,7 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/cn";
 import type { ClientEntry } from "@/sanity/lib/fetch";
 
@@ -25,13 +29,59 @@ function logoHeightPx(client: ClientEntry) {
 }
 
 /**
+ * Info card shown while a client is hovered. Portalled to <body> so the
+ * marquee's overflow-hidden and its transformed track can't clip it, and
+ * positioned as fixed above the mark (which is held still by the pause).
+ */
+function InfoCard({ client, anchor }: { client: ClientEntry; anchor: DOMRect }) {
+  const WIDTH = 288;
+  const GAP = 14;
+  const x = Math.min(Math.max(anchor.left + anchor.width / 2, WIDTH / 2 + 12), window.innerWidth - WIDTH / 2 - 12);
+
+  return createPortal(
+    <div
+      aria-hidden="true"
+      className="glass pointer-events-none fixed z-[80] border border-line p-5 shadow-[0_28px_70px_-20px_rgba(0,0,0,0.95)]"
+      style={{
+        width: WIDTH,
+        left: x,
+        top: anchor.top - GAP,
+        transform: "translate(-50%, -100%)",
+      }}
+    >
+      <p className="text-sm font-medium text-fg">{client.name}</p>
+      {client.about && (
+        <p className="mt-2 text-xs leading-relaxed text-muted">{client.about}</p>
+      )}
+      {client.work && (
+        <p className="mt-3 border-t border-line pt-3 text-xs leading-relaxed text-fg/75">
+          <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-muted">
+            What we did
+          </span>
+          <br />
+          {client.work}
+        </p>
+      )}
+      {client.result && (
+        <div className="mt-3 border-t border-line pt-3">
+          <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-muted">
+            Result
+          </span>
+          <p className="text-metal font-display text-2xl leading-tight tracking-tight tabular-nums">
+            {client.result}
+          </p>
+        </div>
+      )}
+    </div>,
+    document.body,
+  );
+}
+
+/**
  * One client mark: an uploaded logo, or the name set as a typographic
- * wordmark when there's no logo (creators who only have a profile
- * picture). Dimmed at rest, lit on hover, and clickable when a link is set.
- *
- * The strip renders the list twice to loop seamlessly; the second pass is
- * hidden from assistive tech and taken out of the tab order so the links
- * aren't announced or focusable twice.
+ * wordmark when there's no logo. Dimmed at rest, lit on hover, clickable
+ * when a link is set, and — when the client carries hover copy — anchors
+ * an info card above itself.
  */
 function ClientMark({
   client,
@@ -40,17 +90,22 @@ function ClientMark({
   client: ClientEntry;
   duplicate?: boolean;
 }) {
+  const ref = useRef<HTMLElement>(null);
+  const [anchor, setAnchor] = useState<DOMRect | null>(null);
+  const hasCard = Boolean(client.about || client.work || client.result);
+
+  const show = () => {
+    if (hasCard && ref.current) setAnchor(ref.current.getBoundingClientRect());
+  };
+  const hide = () => setAnchor(null);
+
   const mark = client.logoUrl ? (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      // Ask for a tall source so it stays crisp when scaled up.
       src={`${client.logoUrl}?h=240&fit=max&auto=format`}
       alt={duplicate ? "" : client.name}
       loading="lazy"
       draggable={false}
-      // Height drives the size; width follows the aspect ratio. Declaring
-      // the ratio reserves the width before the lazy image arrives, so the
-      // strip doesn't shift as logos load in.
       style={{
         height: `${logoHeightPx(client)}px`,
         aspectRatio: client.logoAspect ? String(client.logoAspect) : undefined,
@@ -72,36 +127,47 @@ function ClientMark({
     </span>
   );
 
-  // min-height (not a fixed height) so a scaled-up logo grows the row
-  // instead of being clipped by it.
   const shared =
     "group/mark flex min-h-14 shrink-0 items-center transition-transform duration-300 ease-out hover:scale-[1.06] motion-reduce:hover:scale-100";
 
-  if (!client.url) {
-    return (
-      <span aria-hidden={duplicate || undefined} className={shared}>
-        {mark}
-      </span>
-    );
-  }
+  const handlers = { onMouseEnter: show, onMouseLeave: hide };
 
-  return (
+  const inner = client.url ? (
     <a
+      ref={ref as React.Ref<HTMLAnchorElement>}
       href={client.url}
       target="_blank"
       rel="noopener noreferrer"
       aria-hidden={duplicate || undefined}
       tabIndex={duplicate ? -1 : undefined}
       className={cn(shared, "cursor-pointer")}
+      {...handlers}
     >
       {mark}
     </a>
+  ) : (
+    <span
+      ref={ref as React.Ref<HTMLSpanElement>}
+      aria-hidden={duplicate || undefined}
+      className={shared}
+      {...handlers}
+    >
+      {mark}
+    </span>
+  );
+
+  return (
+    <>
+      {inner}
+      {anchor && <InfoCard client={client} anchor={anchor} />}
+    </>
   );
 }
 
 /**
  * Scrolling client strip. Pure CSS animation, paused on hover/focus so the
- * links are actually catchable, and fully stopped under prefers-reduced-motion.
+ * links are catchable and the info cards can be read, and fully stopped
+ * under prefers-reduced-motion.
  */
 export function LogoMarquee({ clients }: { clients: ClientEntry[] }) {
   if (!clients.length) return null;

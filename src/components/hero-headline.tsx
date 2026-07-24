@@ -18,7 +18,7 @@ export function HeroHeadline({ lines }: { lines: string[] }) {
   }, []);
 
   return (
-    <h1 className="font-display text-[clamp(2.25rem,9vw,7.5rem)] leading-[0.98] tracking-tight md:leading-[0.95]">
+    <h1 className="font-display text-[clamp(2.25rem,9vw,7.5rem)] leading-[1.06] tracking-tight md:leading-[1.02]">
       {lineWords.map((words, li) => (
         <span key={li} className="block">
           {words.map((word, wi) => (

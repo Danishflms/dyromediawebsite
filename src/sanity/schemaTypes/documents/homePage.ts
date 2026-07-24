@@ -158,9 +158,31 @@ export const homePage = defineType({
               description:
                 "Optional. Where clicking this client goes — their website, channel, or social page. Opens in a new tab.",
             }),
+            defineField({
+              name: "about",
+              title: "About (hover card)",
+              type: "text",
+              rows: 2,
+              description:
+                "Optional. A line or two about the brand or creator — shown in the card that appears when someone hovers this client.",
+            }),
+            defineField({
+              name: "work",
+              title: "What we did (hover card)",
+              type: "text",
+              rows: 2,
+              description: "Optional. The work you did for them, e.g. \"Edited their long-form YouTube series\".",
+            }),
+            defineField({
+              name: "result",
+              title: "Result (hover card)",
+              type: "string",
+              description:
+                "Optional, and highlighted. A single outcome, e.g. \"2.4M views\" or \"+180% watch time\".",
+            }),
           ],
           preview: {
-            select: { title: "name", subtitle: "url", media: "logo" },
+            select: { title: "name", subtitle: "result", media: "logo" },
           },
         }),
       ],

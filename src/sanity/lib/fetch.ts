@@ -146,6 +146,10 @@ export type ClientEntry = {
   logoScale?: number;
   /** Source aspect ratio (w/h), used to even out how big each logo reads. */
   logoAspect?: number;
+  /** Hover-card copy. */
+  about?: string;
+  work?: string;
+  result?: string;
 };
 
 export type HomeContent = {
@@ -420,7 +424,13 @@ export const getServices = cached(async (): Promise<ServiceContent[]> => {
 
 // ── Testimonials ─────────────────────────────────────────────────────────
 
-export type TestimonialContent = { quote: string; name: string; role: string };
+export type TestimonialContent = {
+  quote: string;
+  name: string;
+  role: string;
+  result?: string;
+  photoUrl?: string;
+};
 
 export const getTestimonials = cached(async (): Promise<TestimonialContent[]> => {
   const docs = await safeFetch<TestimonialContent[]>(TESTIMONIALS_QUERY, "testimonial");

@@ -22,7 +22,7 @@ import { CtaBand } from "@/components/cta-band";
 
 function Hero({ hero }: { hero: HomeContent["hero"] }) {
   return (
-    <section className="relative flex min-h-dvh items-center justify-center overflow-hidden text-center">
+    <section className="sticky top-0 z-0 flex min-h-dvh items-center justify-center overflow-hidden text-center">
       {/* Optional muted showreel / image. Falls back to the placeholder frame. */}
       {(hero.backgroundVideoUrl || hero.backgroundImageUrl) && (
         <div aria-hidden="true" className="absolute inset-0">
@@ -63,7 +63,7 @@ function Hero({ hero }: { hero: HomeContent["hero"] }) {
       <span aria-hidden="true" className="pointer-events-none absolute bottom-24 left-6 hidden h-4 w-4 border-b border-l border-white/15 md:left-10 md:block" />
       <span aria-hidden="true" className="pointer-events-none absolute bottom-24 right-6 hidden h-4 w-4 border-b border-r border-white/15 md:right-10 md:block" />
 
-      <Container className="relative z-10 flex flex-col items-center pb-20 pt-28 md:pb-28 md:pt-32">
+      <Container className="relative z-10 flex flex-col items-center pb-20 pt-28 md:pb-28 md:pt-32 lg:pb-16 lg:pt-24">
         <Reveal>
           <span className="glass inline-flex items-center gap-2.5 rounded-full px-4 py-2 font-mono text-[11px] tracking-[0.25em] uppercase text-muted">
             <span className="relative flex h-1.5 w-1.5">
@@ -74,34 +74,34 @@ function Hero({ hero }: { hero: HomeContent["hero"] }) {
           </span>
         </Reveal>
 
-        <div className="mt-8 md:mt-14">
+        <div className="mt-8 md:mt-14 lg:mt-10">
           <HeroHeadline lines={hero.headline} />
         </div>
 
-        <div aria-hidden="true" className="hero-line mt-8 md:mt-10" />
+        <div aria-hidden="true" className="hero-line mt-8 md:mt-10 lg:mt-7" />
 
         {/* Beneath the tagline. Three distinct compositions:
             phone  — everything stacked and centred;
             tablet — rolling words | info side by side, CTAs on their own row
                      (three columns can't hold a 60px phrase until ~1280px);
             wide   — rolling words | CTAs | info across three columns. */}
-        <div className="mt-10 grid w-full items-center gap-8 sm:grid-cols-2 md:mt-16 xl:grid-cols-3">
+        <div className="mt-10 grid w-full items-center gap-8 sm:grid-cols-2 md:mt-16 lg:mt-10 lg:gap-12 xl:grid-cols-3">
           <Reveal delay={0.15} className="flex justify-center sm:justify-start">
             <RollingWords />
           </Reveal>
           <Reveal
             delay={0.2}
-            className="flex w-full flex-col items-center gap-3 sm:order-last sm:col-span-2 sm:flex-row sm:justify-center xl:order-none xl:col-span-1 xl:flex-col"
+            className="flex w-full flex-col items-center gap-3 sm:order-last sm:col-span-2 sm:flex-row sm:justify-center lg:gap-4 xl:order-none xl:col-span-1 xl:flex-col"
           >
-            <CtaLink href={hero.primaryCta.href} block>
+            <CtaLink href={hero.primaryCta.href} size="lg" block>
               {hero.primaryCta.label}
             </CtaLink>
-            <CtaLink href={hero.secondaryCta.href} variant="secondary" block>
+            <CtaLink href={hero.secondaryCta.href} variant="secondary" size="lg" block>
               {hero.secondaryCta.label}
             </CtaLink>
           </Reveal>
           <Reveal delay={0.25} className="flex justify-center sm:justify-end">
-            <p className="max-w-sm text-center text-base leading-relaxed text-muted sm:text-left md:text-lg">
+            <p className="max-w-sm text-center text-base leading-relaxed text-muted sm:text-left md:text-lg lg:max-w-md lg:text-xl">
               {hero.subhead}
             </p>
           </Reveal>
@@ -233,7 +233,11 @@ function Clients({ clients }: { clients: HomeContent["clients"] }) {
   );
 }
 
-function Testimonials({ items }: { items: { quote: string; name: string; role: string }[] }) {
+function Testimonials({
+  items,
+}: {
+  items: { quote: string; name: string; role: string; result?: string; photoUrl?: string }[];
+}) {
   return (
     <Section eyebrow="Client words" title="Taken at their word">
       <Reveal>
@@ -252,8 +256,16 @@ export default async function Home() {
 
   return (
     <>
-      <Hero hero={content.hero} />
-      <WhatWeDo whatWeDo={content.whatWeDo} />
+      {/* The hero is pinned (sticky) while the first section scrolls up and
+          over it. Wrapping just the hero + first section limits the sticky
+          to that stretch, so the rest of the page scrolls normally. The
+          opaque bg is what hides the pinned hero as it's covered. */}
+      <div className="relative">
+        <Hero hero={content.hero} />
+        <div className="relative z-10 bg-bg">
+          <WhatWeDo whatWeDo={content.whatWeDo} />
+        </div>
+      </div>
       <SelectedWork projects={selectedWork} />
       <ServicesShowcase />
       <Stats stats={content.stats} />
