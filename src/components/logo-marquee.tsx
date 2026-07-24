@@ -45,8 +45,8 @@ function InfoCard({ client, anchor }: { client: ClientEntry; anchor: DOMRect }) 
       style={{
         width: WIDTH,
         left: x,
-        top: anchor.top - GAP,
-        transform: "translate(-50%, -100%)",
+        top: anchor.bottom + GAP,
+        transform: "translate(-50%, 0)",
       }}
     >
       <p className="text-sm font-medium text-fg">{client.name}</p>

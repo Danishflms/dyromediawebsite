@@ -69,7 +69,7 @@ export function TestimonialCard({
           {photoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={`${photoUrl}?w=112&h=112&fit=crop&crop=faces&auto=format`}
+              src={`${photoUrl}?w=112&h=112&fit=crop&crop=center&auto=format`}
               alt=""
               loading="lazy"
               className="h-full w-full object-cover"

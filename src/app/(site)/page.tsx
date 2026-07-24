@@ -10,6 +10,7 @@ import { Container, Section } from "@/components/section";
 import { CtaLink } from "@/components/cta-link";
 import { Reveal, RevealGroup, RevealItem } from "@/components/reveal";
 import { HeroHeadline } from "@/components/hero-headline";
+import { HeroScrollFade } from "@/components/hero-scroll-fade";
 import { RollingWords } from "@/components/rolling-words";
 import { WorkCard } from "@/components/work-card";
 import { AutoplayVideo } from "@/components/autoplay-video";
@@ -22,7 +23,7 @@ import { CtaBand } from "@/components/cta-band";
 
 function Hero({ hero }: { hero: HomeContent["hero"] }) {
   return (
-    <section className="sticky top-0 z-0 flex min-h-dvh items-center justify-center overflow-hidden text-center">
+    <section className="flex min-h-dvh items-center justify-center overflow-hidden text-center">
       {/* Optional muted showreel / image. Falls back to the placeholder frame. */}
       {(hero.backgroundVideoUrl || hero.backgroundImageUrl) && (
         <div aria-hidden="true" className="absolute inset-0">
@@ -256,16 +257,13 @@ export default async function Home() {
 
   return (
     <>
-      {/* The hero is pinned (sticky) while the first section scrolls up and
-          over it. Wrapping just the hero + first section limits the sticky
-          to that stretch, so the rest of the page scrolls normally. The
-          opaque bg is what hides the pinned hero as it's covered. */}
-      <div className="relative">
+      {/* The hero is pinned and fades as the sections below scroll up over
+          it. Those sections stay transparent, so the ambient particles keep
+          showing through them (no opaque cover panel needed). */}
+      <HeroScrollFade>
         <Hero hero={content.hero} />
-        <div className="relative z-10 bg-bg">
-          <WhatWeDo whatWeDo={content.whatWeDo} />
-        </div>
-      </div>
+      </HeroScrollFade>
+      <WhatWeDo whatWeDo={content.whatWeDo} />
       <SelectedWork projects={selectedWork} />
       <ServicesShowcase />
       <Stats stats={content.stats} />
